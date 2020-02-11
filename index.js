@@ -6,7 +6,7 @@ const utils = require('./utils');
   // Viewport && Window size
   const width = 1366
   const height = 768
-  const artist = 'kyuyongeom';
+  const artist = 'kveldulv';
 
   const browser = await puppeteer.launch({
     headless: false,
@@ -18,6 +18,8 @@ const utils = require('./utils');
 
   const page = await browser.newPage();
   await page.goto(`${config.url}/${artist}`);
+
+  await utils.autoScroll(page);
 
   const imageThumbs = await page.$$('user-projects:not(.ng-hide) .project-image');
 
@@ -46,14 +48,6 @@ const utils = require('./utils');
       utils.saveImage(await anchorHref.jsonValue(), folder);
     }
   }
-
-  // imageThumbs.forEach(async (imageThumb) => {
-  //   const href = await imageThumb.getProperty('href');
-  //   await imageTab.goto(await href.jsonValue());
-  //   // utils.saveImage('https://cdna.artstation.com/p/assets/images/images/021/734/858/large/wl-op-13se.jpg?1572773219', folder);
-  // })
-
-  // utils.saveImage('https://cdna.artstation.com/p/assets/images/images/021/734/858/large/wl-op-13se.jpg?1572773219', folder);
 
   await browser.close();
 })();
