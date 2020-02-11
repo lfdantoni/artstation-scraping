@@ -6,7 +6,7 @@ const utils = require('./utils');
   // Viewport && Window size
   const width = 1366
   const height = 768
-  const artist = 'dcwj';
+  const artist = 'kyuyongeom';
 
   const browser = await puppeteer.launch({
     headless: false,

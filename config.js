@@ -1,3 +1,4 @@
 module.exports = {
-  url: 'https://www.artstation.com'
+  url: 'https://www.artstation.com',
+  localFolderDownload: 'downloads'
 }

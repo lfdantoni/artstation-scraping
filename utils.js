@@ -1,8 +1,9 @@
 const fs = require('fs');
 const request = require('request');
+const config = require('./config');
 
 const createFolder = (name, basePath = null) => {
-  const dir = basePath ?  `${basePath}/${name}` : `./${name}`;
+  const dir = basePath ?  `${basePath}/${name}` : `./${config.localFolderDownload}/${name}`;
 
   if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
