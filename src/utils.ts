@@ -1,12 +1,17 @@
-const fs = require('fs');
-const request = require('request');
-const config = require('./config');
+import { Page } from "puppeteer";
+import {existsSync, mkdirSync, createWriteStream} from 'fs';
+import request from 'request';
+import {Config} from './config';
 
-const createFolder = (name, basePath = null) => {
-  const dir = basePath ?  `${basePath}/${name}` : `./${config.localFolderDownload}/${name}`;
+export interface FolderConfig {
+  dir: string;
+}
 
-  if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+export const createFolder = (name: string, basePath: string = null): FolderConfig => {
+  const dir = basePath ?  `${basePath}/${name}` : `./${Config.localFolderDownload}/${name}`;
+
+  if (!existsSync(dir)){
+    mkdirSync(dir);
   }
 
   return {
@@ -14,24 +19,24 @@ const createFolder = (name, basePath = null) => {
   }
 }
 
-const saveImage = (url, folder) => {
+export const saveImage = (url: string, folder: FolderConfig) => {
   const fileName = `${new Date().getTime()}-${url.split('/').pop().split('#')[0].split('?')[0]}`;
   const filePathToSave = `${folder.dir}/${fileName}`;
 
   request(url)
-    .pipe(fs.createWriteStream(filePathToSave))
+    .pipe(createWriteStream(filePathToSave))
     .on('close', () => console.log(`${fileName} saved`));
 }
 
-function sleep(ms) {
+export const sleep = function sleep(ms: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
 
-async function autoScroll(page){
+export const autoScroll = async (page: Page) => {
   await page.evaluate(async () => {
-      await new Promise((resolve, reject) => {
+      await new Promise(resolve => {
           var totalHeight = 0;
           var distance = 100;
           var timer = setInterval(() => {
@@ -46,11 +51,4 @@ async function autoScroll(page){
           }, 100);
       });
   });
-}
-
-module.exports = {
-  createFolder,
-  saveImage,
-  sleep,
-  autoScroll
 }

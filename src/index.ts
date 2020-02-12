@@ -1,6 +1,7 @@
-const puppeteer = require('puppeteer');
-const config = require('./config');
-const utils = require('./utils');
+import { launch } from 'puppeteer';
+import {Config} from './config';
+import {autoScroll, createFolder, sleep, saveImage} from './utils';
+
 
 (async () => {
   // Viewport && Window size
@@ -8,7 +9,7 @@ const utils = require('./utils');
   const height = 768
   const artist = 'kveldulv';
 
-  const browser = await puppeteer.launch({
+  const browser = await launch({
     headless: false,
     defaultViewport: null,
     args: [
@@ -17,13 +18,13 @@ const utils = require('./utils');
   });
 
   const page = await browser.newPage();
-  await page.goto(`${config.url}/${artist}`);
+  await page.goto(`${Config.url}/${artist}`);
 
-  await utils.autoScroll(page);
+  await autoScroll(page);
 
   const imageThumbs = await page.$$('user-projects:not(.ng-hide) .project-image');
 
-  const folder = utils.createFolder(artist);
+  const folder = createFolder(artist);
   
   console.log(imageThumbs.length);
 
@@ -33,7 +34,7 @@ const utils = require('./utils');
     const imageThumb = imageThumbs[i];
 
     const href = await imageThumb.getProperty('href');
-    await imageTab.goto(await href.jsonValue());
+    await imageTab.goto((await href.jsonValue()) as string);
 
     const anchors = await imageTab.$$('.asset-actions a:first-child');
 
@@ -43,9 +44,9 @@ const utils = require('./utils');
       
       // Waiting for each download (0s - 5s)
       const waitTime = Math.floor(Math.random() * Math.floor(5000));
-      await utils.sleep(waitTime);
+      await sleep(waitTime);
 
-      utils.saveImage(await anchorHref.jsonValue(), folder);
+      saveImage(await anchorHref.jsonValue() as string, folder);
     }
   }
 
