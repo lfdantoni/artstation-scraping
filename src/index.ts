@@ -7,7 +7,7 @@ import {autoScroll, createFolder, sleep, saveImage} from './utils';
   // Viewport && Window size
   const width = 1366
   const height = 768
-  const artist = 'kveldulv';
+  const artist = 'yuanyuan88416';
 
   const browser = await launch({
     headless: false,
