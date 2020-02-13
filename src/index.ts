@@ -2,13 +2,24 @@ import { launch} from 'puppeteer';
 import {Config} from './config';
 import {autoScroll, createFolder, sleep, saveImage} from './utils';
 
+export interface ImageState {
+  finish: boolean;
+  log: string;
+  imagePath?: string;
+}
 
-(async () => {
+const downloadGallery = async (artist: string, updateCallback?: (state: ImageState) => void) => {
+
+  const imageSaved = (imageName: string, imagePath: string) => {
+    if (updateCallback) {
+      console.log(`Image ${imageName} saved`)
+      updateCallback({log: `Image ${imageName} saved`, finish: false, imagePath})
+    }
+  }
   // Viewport && Window size
   const width = 1366
   const height = 768
   const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36';
-  const artist = process.env.ARTIST || '';
 
   console.log('artist: ', artist);
 
@@ -38,16 +49,13 @@ import {autoScroll, createFolder, sleep, saveImage} from './utils';
 
   const imageTab = await browser.newPage();
 
-  for (let i = 0; i < imageThumbs.length; i++) {
+  // for (let i = 0; i < imageThumbs.length; i++) {
+  for (let i = 0; i < 3; i++) {
     const imageThumb = imageThumbs[i];
     const href = await imageThumb.getProperty('href');
 
     await imageTab.setUserAgent(userAgent);
     await imageTab.goto((await href.jsonValue()) as string);
-
-    // await imageTab.waitForNavigation({ waitUntil: 'networkidle0' });
-    
-    // const anchors = await imageTab.$$('.asset-actions a:first-child');
 
     const anchorsSelector = '.asset-actions a:first-child';
     await imageTab.waitForSelector(anchorsSelector);
@@ -62,9 +70,20 @@ import {autoScroll, createFolder, sleep, saveImage} from './utils';
       const waitTime = Math.floor(Math.random() * Math.floor(5000));
       await sleep(waitTime);
 
-      saveImage(anchorHrefValue, folder);
+      const response = await saveImage(anchorHrefValue, folder);
+      imageSaved(response.fileName, response.filePathToSave);
     }
   }
 
   await browser.close();
-})();
+
+  updateCallback({log: 'Process finished', finish: true});
+}
+
+if(process.env.ARTIST) {
+  downloadGallery(process.env.ARTIST);
+}
+
+export {
+  downloadGallery
+}

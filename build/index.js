@@ -3,12 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const puppeteer_1 = require("puppeteer");
 const config_1 = require("./config");
 const utils_1 = require("./utils");
-(async () => {
+const downloadGallery = async (artist, updateCallback) => {
+    const imageSaved = (imageName, imagePath) => {
+        if (updateCallback) {
+            console.log(`Image ${imageName} saved`);
+            updateCallback({ log: `Image ${imageName} saved`, finish: false, imagePath });
+        }
+    };
     // Viewport && Window size
     const width = 1366;
     const height = 768;
     const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36';
-    const artist = process.env.ARTIST || '';
     console.log('artist: ', artist);
     const browser = await puppeteer_1.launch({
         headless: true,
@@ -27,13 +32,12 @@ const utils_1 = require("./utils");
     const folder = utils_1.createFolder(artist);
     console.log(imageThumbs.length);
     const imageTab = await browser.newPage();
-    for (let i = 0; i < imageThumbs.length; i++) {
+    // for (let i = 0; i < imageThumbs.length; i++) {
+    for (let i = 0; i < 3; i++) {
         const imageThumb = imageThumbs[i];
         const href = await imageThumb.getProperty('href');
         await imageTab.setUserAgent(userAgent);
         await imageTab.goto((await href.jsonValue()));
-        // await imageTab.waitForNavigation({ waitUntil: 'networkidle0' });
-        // const anchors = await imageTab.$$('.asset-actions a:first-child');
         const anchorsSelector = '.asset-actions a:first-child';
         await imageTab.waitForSelector(anchorsSelector);
         const anchors = await imageTab.$$(anchorsSelector);
@@ -44,8 +48,14 @@ const utils_1 = require("./utils");
             // Waiting for each download (0s - 5s)
             const waitTime = Math.floor(Math.random() * Math.floor(5000));
             await utils_1.sleep(waitTime);
-            utils_1.saveImage(anchorHrefValue, folder);
+            const response = await utils_1.saveImage(anchorHrefValue, folder);
+            imageSaved(response.fileName, response.filePathToSave);
         }
     }
     await browser.close();
-})();
+    updateCallback({ log: 'Process finished', finish: true });
+};
+exports.downloadGallery = downloadGallery;
+if (process.env.ARTIST) {
+    downloadGallery(process.env.ARTIST);
+}
