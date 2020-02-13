@@ -2,14 +2,12 @@ import { Page } from "puppeteer";
 import {existsSync, mkdirSync, createWriteStream} from 'fs';
 import request from 'request';
 import {Config} from './config';
-import {join} from 'path';
 
 export interface FolderConfig {
   dir: string;
 }
 
 export const createFolder = (name: string, basePath: string = null): FolderConfig => {
-  // const dir = basePath ?  join(__dirname, `${basePath}/${name}`) : join(__dirname, `${Config.localFolderDownload}/${name}`);
   const downloadPath = basePath || Config.localFolderDownload;
   const dir =`./${downloadPath}/${name}`;
 
