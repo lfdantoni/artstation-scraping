@@ -19,7 +19,9 @@ const downloadGallery = async (artist, updateCallback) => {
         headless: true,
         defaultViewport: null,
         args: [
-            `--window-size=${width},${height}`
+            `--window-size=${width},${height}`,
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
         ],
     });
     const page = await browser.newPage();
@@ -32,8 +34,7 @@ const downloadGallery = async (artist, updateCallback) => {
     const folder = utils_1.createFolder(artist);
     console.log(imageThumbs.length);
     const imageTab = await browser.newPage();
-    // for (let i = 0; i < imageThumbs.length; i++) {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < imageThumbs.length; i++) {
         const imageThumb = imageThumbs[i];
         const href = await imageThumb.getProperty('href');
         await imageTab.setUserAgent(userAgent);

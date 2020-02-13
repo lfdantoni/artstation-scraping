@@ -12,7 +12,6 @@ app.use('/downloads', express_1.default.static(path_1.join(__dirname, '../downlo
 app.get('/process/:artist', async (req, res) => {
     res.write(`<html><head></head><body>`);
     res.write("Processing...<br>");
-    // res.write(`<a href="./downloads/ghostsunpark/1581560215106-kisuny-park-for-deathstanding-christmas-20191201-a.jpg">test</a>`)
     await index_1.downloadGallery(req.params.artist, (state) => {
         if (state.finish) {
             console.log('downloadGallery: ', state.log);
@@ -20,7 +19,7 @@ app.get('/process/:artist', async (req, res) => {
             return;
         }
         console.log('downloadGallery: ', state.log);
-        res.write(`<a target="_blank" href="../${state.imagePath}">${state.log}</a> <br>`);
+        res.write(`<a target="_blank" href="../${state.imagePath}"><img src="../${state.imagePath}" style="height: 50%"></a>`);
     });
     res.write(`Finish!</body></html>`);
     res.end();

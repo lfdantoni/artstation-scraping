@@ -19,7 +19,7 @@ app.get('/process/:artist',
       }
 
       console.log('downloadGallery: ', state.log);
-      res.write(`<a target="_blank" href="../${state.imagePath}">${state.log}</a> <br>`);
+      res.write(`<a target="_blank" href="../${state.imagePath}"><img src="../${state.imagePath}" style="height: 50%"></a>`);
     });
 
     res.write(`Finish!</body></html>`);

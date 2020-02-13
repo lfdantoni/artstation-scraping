@@ -7,7 +7,6 @@ const fs_1 = require("fs");
 const request_1 = __importDefault(require("request"));
 const config_1 = require("./config");
 exports.createFolder = (name, basePath = null) => {
-    // const dir = basePath ?  join(__dirname, `${basePath}/${name}`) : join(__dirname, `${Config.localFolderDownload}/${name}`);
     const downloadPath = basePath || config_1.Config.localFolderDownload;
     const dir = `./${downloadPath}/${name}`;
     if (!fs_1.existsSync(downloadPath)) {
