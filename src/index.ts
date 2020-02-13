@@ -27,7 +27,9 @@ const downloadGallery = async (artist: string, updateCallback?: (state: ImageSta
     headless: true,
     defaultViewport: null,
     args: [
-      `--window-size=${ width },${ height }`
+      `--window-size=${ width },${ height }`,
+      '--no-sandbox',
+      '--disable-setuid-sandbox'
     ],
   });
 
