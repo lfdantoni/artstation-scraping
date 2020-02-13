@@ -31,7 +31,7 @@ const downloadGallery = async (artist: string, updateCallback?: (state: ImageSta
       '--no-sandbox',
       '--disable-setuid-sandbox'
     ],
-  });
+  }); 
 
   const page = await browser.newPage();
 
