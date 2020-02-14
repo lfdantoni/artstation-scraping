@@ -51,8 +51,7 @@ const downloadGallery = async (artist: string, updateCallback?: (state: ImageSta
 
   const imageTab = await browser.newPage();
 
-  // for (let i = 0; i < imageThumbs.length; i++) {
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < imageThumbs.length; i++) {
     const imageThumb = imageThumbs[i];
     const href = await imageThumb.getProperty('href');
 
