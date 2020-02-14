@@ -1,6 +1,6 @@
 import { launch} from 'puppeteer';
 import {Config} from './config';
-import {autoScroll, createFolder, sleep, saveImage} from './utils';
+import {autoScroll, createArtistFolder, sleep, saveImage} from './utils';
 
 export interface ImageState {
   finish: boolean;
@@ -45,7 +45,7 @@ const downloadGallery = async (artist: string, updateCallback?: (state: ImageSta
 
   const imageThumbs = await page.$$('user-projects:not(.ng-hide) .project-image');
 
-  const folder = createFolder(artist);
+  const folder = createArtistFolder(artist);
   
   console.log(imageThumbs.length);
 
@@ -72,7 +72,7 @@ const downloadGallery = async (artist: string, updateCallback?: (state: ImageSta
       await sleep(waitTime);
 
       const response = await saveImage(anchorHrefValue, folder);
-      imageSaved(response.fileName, response.filePathToSave);
+      imageSaved(response.fileName, response.relativeFilePath);
     }
   }
 

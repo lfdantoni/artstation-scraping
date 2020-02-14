@@ -31,7 +31,7 @@ const downloadGallery = async (artist, updateCallback) => {
     });
     await utils_1.autoScroll(page);
     const imageThumbs = await page.$$('user-projects:not(.ng-hide) .project-image');
-    const folder = utils_1.createFolder(artist);
+    const folder = utils_1.createArtistFolder(artist);
     console.log(imageThumbs.length);
     const imageTab = await browser.newPage();
     for (let i = 0; i < imageThumbs.length; i++) {
@@ -50,7 +50,7 @@ const downloadGallery = async (artist, updateCallback) => {
             const waitTime = Math.floor(Math.random() * Math.floor(5000));
             await utils_1.sleep(waitTime);
             const response = await utils_1.saveImage(anchorHrefValue, folder);
-            imageSaved(response.fileName, response.filePathToSave);
+            imageSaved(response.fileName, response.relativeFilePath);
         }
     }
     await browser.close();

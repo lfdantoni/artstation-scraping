@@ -2,37 +2,41 @@ import { Page } from "puppeteer";
 import {existsSync, mkdirSync, createWriteStream} from 'fs';
 import request from 'request';
 import {Config} from './config';
+import {join} from 'path';
 
 export interface FolderConfig {
-  dir: string;
+  relativeArtistPath: string;
 }
 
-export const createFolder = (name: string, basePath: string = null): FolderConfig => {
-  const downloadPath = basePath || Config.localFolderDownload;
-  const dir =`./${downloadPath}/${name}`;
+export const createArtistFolder = (name: string, downloadPath: string = null): FolderConfig => {
+  const downloadFolderName = downloadPath || Config.localFolderDownload;
+  const artistPath =   join(__dirname, downloadFolderName, name);
+  const downloadFolderPath = join(__dirname, downloadFolderName);
+  
 
-  if (!existsSync(downloadPath)){
-    mkdirSync(downloadPath);
+  if (!existsSync(downloadFolderPath)){
+    mkdirSync(downloadFolderPath);
   }
 
-  if (!existsSync(dir)){
-    mkdirSync(dir);
+  if (!existsSync(artistPath)){
+    mkdirSync(artistPath);
   }
 
   return {
-    dir
+    relativeArtistPath: `${downloadFolderName}/${name}`
   }
 }
 
-export const saveImage = (url: string, folder: FolderConfig): Promise<{fileName: string, filePathToSave: string}> => {
+export const saveImage = (url: string, folder: FolderConfig): Promise<{fileName: string, relativeFilePath: string}> => {
   const fileName = `${new Date().getTime()}-${url.split('/').pop().split('#')[0].split('?')[0]}`;
-  const filePathToSave = `${folder.dir}/${fileName}`;
+  const relativeFilePath = `${folder.relativeArtistPath}/${fileName}`;
+  const filePathToSave =join(__dirname, relativeFilePath);
 
   return new Promise((resolve) => {
     request(url)
     .pipe(createWriteStream(filePathToSave))
     .on('close', () => {
-      resolve({fileName, filePathToSave});
+      resolve({fileName, relativeFilePath});
     });
   })
 

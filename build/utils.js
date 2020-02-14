@@ -6,27 +6,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = require("fs");
 const request_1 = __importDefault(require("request"));
 const config_1 = require("./config");
-exports.createFolder = (name, basePath = null) => {
-    const downloadPath = basePath || config_1.Config.localFolderDownload;
-    const dir = `./${downloadPath}/${name}`;
-    if (!fs_1.existsSync(downloadPath)) {
-        fs_1.mkdirSync(downloadPath);
+const path_1 = require("path");
+exports.createArtistFolder = (name, downloadPath = null) => {
+    const downloadFolderName = downloadPath || config_1.Config.localFolderDownload;
+    const artistPath = path_1.join(__dirname, downloadFolderName, name);
+    const downloadFolderPath = path_1.join(__dirname, downloadFolderName);
+    if (!fs_1.existsSync(downloadFolderPath)) {
+        fs_1.mkdirSync(downloadFolderPath);
     }
-    if (!fs_1.existsSync(dir)) {
-        fs_1.mkdirSync(dir);
+    if (!fs_1.existsSync(artistPath)) {
+        fs_1.mkdirSync(artistPath);
     }
     return {
-        dir
+        relativeArtistPath: `${downloadFolderName}/${name}`
     };
 };
 exports.saveImage = (url, folder) => {
     const fileName = `${new Date().getTime()}-${url.split('/').pop().split('#')[0].split('?')[0]}`;
-    const filePathToSave = `${folder.dir}/${fileName}`;
+    const relativeFilePath = `${folder.relativeArtistPath}/${fileName}`;
+    const filePathToSave = path_1.join(__dirname, relativeFilePath);
     return new Promise((resolve) => {
         request_1.default(url)
             .pipe(fs_1.createWriteStream(filePathToSave))
             .on('close', () => {
-            resolve({ fileName, filePathToSave });
+            resolve({ fileName, relativeFilePath });
         });
     });
 };
