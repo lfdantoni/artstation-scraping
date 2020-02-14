@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const index_1 = require("./index");
 const path_1 = require("path");
 const config_1 = require("./config");
+const utils_1 = require("./utils");
 const app = express_1.default();
 const port = process.env.PORT || 5000;
 app.use('/downloads', express_1.default.static(path_1.join(__dirname, config_1.Config.localFolderDownload)));
@@ -24,6 +25,9 @@ app.get('/process/:artist', async (req, res) => {
         const imageUrl = `${req.protocol}://${hostname}/${state.imagePath}`;
         res.write(`<a target="_blank" href="${imageUrl}"><img src="${imageUrl}" style="height: 50%"></a>`);
     });
+    const zipPath = await utils_1.createZip(`${config_1.Config.localFolderDownload}/${req.params.artist}`);
+    const sipUrl = `${req.protocol}://${hostname}/${zipPath}`;
+    res.write(`<a target="_blank" href="${sipUrl}">ZIP</a><br>`);
     res.write(`Finish!</body></html>`);
     res.end();
 });

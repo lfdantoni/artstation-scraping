@@ -2,6 +2,7 @@ import express from 'express';
 import {downloadGallery, ImageState} from './index'
 import {join} from 'path';
 import {Config} from './config';
+import { createZip } from './utils';
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -24,6 +25,10 @@ app.get('/process/:artist',
       const imageUrl = `${req.protocol}://${hostname}/${state.imagePath}`;
       res.write(`<a target="_blank" href="${imageUrl}"><img src="${imageUrl}" style="height: 50%"></a>`);
     });
+
+    const zipPath = await createZip(`${Config.localFolderDownload}/${req.params.artist}`);
+    const sipUrl = `${req.protocol}://${hostname}/${zipPath}`;
+    res.write(`<a target="_blank" href="${sipUrl}">ZIP</a><br>`);
 
     res.write(`Finish!</body></html>`);
     res.end();

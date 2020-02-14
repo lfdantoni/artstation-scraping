@@ -7,6 +7,7 @@ const fs_1 = require("fs");
 const request_1 = __importDefault(require("request"));
 const config_1 = require("./config");
 const path_1 = require("path");
+const archiver_1 = require("archiver");
 exports.createArtistFolder = (name, downloadPath = null) => {
     const downloadFolderName = downloadPath || config_1.Config.localFolderDownload;
     const artistPath = path_1.join(__dirname, downloadFolderName, name);
@@ -53,5 +54,26 @@ exports.autoScroll = async (page) => {
                 }
             }, 100);
         });
+    });
+};
+exports.createZip = (folderPath) => {
+    console.log('createZip: ', folderPath);
+    return new Promise(async (resolve, reject) => {
+        const relativeZipPath = `${config_1.Config.localFolderDownload}/${new Date().getTime()}-${folderPath.replace(/\//g, "-")}.zip`;
+        const output = fs_1.createWriteStream(__dirname + `/${relativeZipPath}`);
+        const archive = archiver_1.create('zip', {
+            zlib: { level: 9 } // Sets the compression level.
+        });
+        output.on('close', function () {
+            console.log(archive.pointer() + ' total bytes');
+            console.log('archiver has been finalized and the output file descriptor has closed.');
+            resolve(relativeZipPath);
+        });
+        archive.on('error', function (err) {
+            reject(err);
+        });
+        archive.pipe(output);
+        archive.directory(`${__dirname}/${folderPath}/`, false);
+        await archive.finalize();
     });
 };

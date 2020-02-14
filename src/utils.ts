@@ -3,6 +3,7 @@ import {existsSync, mkdirSync, createWriteStream} from 'fs';
 import request from 'request';
 import {Config} from './config';
 import {join} from 'path';
+import {create} from 'archiver';
 
 export interface FolderConfig {
   relativeArtistPath: string;
@@ -65,4 +66,31 @@ export const autoScroll = async (page: Page) => {
           }, 100);
       });
   });
+}
+
+export const createZip = (folderPath: string): Promise<string> => {
+  console.log('createZip: ', folderPath)
+  return new Promise(async (resolve, reject) => {
+    const relativeZipPath = `${Config.localFolderDownload}/${new Date().getTime()}-${folderPath.replace(/\//g, "-")}.zip`;
+    const output = createWriteStream(__dirname + `/${relativeZipPath}`);
+    const archive = create('zip', {
+      zlib: { level: 9 } // Sets the compression level.
+    });
+
+    output.on('close', function() {
+      console.log(archive.pointer() + ' total bytes');
+      console.log('archiver has been finalized and the output file descriptor has closed.');
+      resolve(relativeZipPath);
+    });
+
+    archive.on('error', function(err) {
+      reject(err)
+    });
+
+    archive.pipe(output);
+
+    archive.directory(`${__dirname}/${folderPath}/`, false);
+
+    await archive.finalize();
+  })
 }

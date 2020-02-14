@@ -34,7 +34,8 @@ const downloadGallery = async (artist, updateCallback) => {
     const folder = utils_1.createArtistFolder(artist);
     console.log(imageThumbs.length);
     const imageTab = await browser.newPage();
-    for (let i = 0; i < imageThumbs.length; i++) {
+    // for (let i = 0; i < imageThumbs.length; i++) {
+    for (let i = 0; i < 2; i++) {
         const imageThumb = imageThumbs[i];
         const href = await imageThumb.getProperty('href');
         await imageTab.setUserAgent(userAgent);
