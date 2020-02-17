@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "artstation-scraping",
+  "private_key_id": "2542387682cf84c4f96822c4b2ed0a360a34ed3a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDU3bBnCNBQOV3l\nX7tMmvbUWHt3leZjg1y/12wuEjAz18++gfSkcKBIVb2uX1C6RLsnEmAPECcKlbTk\nInS4sL8O1OgwvmEao5zVAk8aZxUX+E+WE+T/wZjlfI9oZLGOw13EpbKbtyZSGK9c\nGeS/KGR3zrxipP+n5Kehsjk6NjSnyHnDgxJJilmE5fV91hx333Tzb5e6DxkSQyTt\nPyjNvYx34yCtVcGpUBm5ZlDypLuFAnlnmuyrrRlEdTC6OcILGbMW2ECy6ziqGUmC\nDReokhjXpZWhW0UKkG7xW3qm1yI4+vFwstX8C5qyNaYg89fYxLSbagrRFB67tI/K\nuhXYDgBpAgMBAAECggEAXOdAhUeQe2L+OwzUFzQPBFB12pR+z/HWOhhQK69egFHx\nZmkbl+Vb3xYkygTpm9JBiGT5rblUAMekAmmTXcQuLs/3YsbEZLcBzOnMEm7pAuQq\nAAtAx+r7yzTY9iv0XqWfuCLFWDbQL8Z8Sos2jcOYTb3Z9Iek2Obvzp+VYHWl94+4\n58t+09HWjcBZe9grBMkQOl/5xk12HyP1MxkZDxrKjhtn4HMXK3IPErY5M2icZ+q1\nSrbiyS/1fodnLswkIQD6oyBcg0Fbnh7ylLCtMDJnPdDFYZRJHd2e2w+gMvTcFFnc\nwVsQkf6PLkwE0h+NCQpllwHltFi0bllXzGIdgdQEbQKBgQDqr2i2/olGHWYucSSE\nAWyCXvRq8xetCXjrZDtrxAfMw046D++itKLepyuA2NGlr+xeuRycnh9HtDGH0mJl\n35r+wbvUdCI7b1/A/xpkP2lXqb8HgYQRspqO7CX+krhKkeP/xYVXfKL/5AQmMxdU\nONRIeGL5vCodBsa9DTdTWM5FewKBgQDoMvfiWOppKLJzceME8D3K8eshaHgYDNEY\na1eiprSGljJFUTdC9Q861ORYvtkulWoLofh6K+f1QJCCDSkKFk8esdNCSBgpuZ1F\nfw+32eYAMe/e16ALM3SOs9bTdAwXcns87Z2xgPuQXvNd9AicJIyPdZQ9SLtHtsrq\nnNf5iCQCawKBgQCWuspanei067TxJyH41qFGqo35EuCl9mt/ZAT2FhWcYeQgTpPu\nwG3K6zt5qcgcznzV6baCsNwORaF6RpmELLVz4iItNdm2qrWpUy80K7YQ46kZvQmC\nBGBYYzuT4dATtNfnMomNwzM9fslbb30QTt+pHAkVtNCni+6hBZf/JA53eQKBgQCb\njnG0qL65nnMWlihxiYTMLg/IvNUfv45hHqCCLc5pD7wz5fnwmH4QeslTjt+urphx\nnJv7NOjby9pD1g81W8a7mIQgNm5BncD36uybzZWhcdLx5mCowFsIswBrfqYPGznm\nkoV/ghqGGKZPvgn6mR21ih66g7w7igEc9eBWolcFawKBgAKLEmyPEWvqKzz6bkRW\nS9U8MAN9Th6RgoFnPAkyVLWXrhkSFH+s1bXPEqqhnfDdvd1MhwaK4Pu1Y3kpG7WI\nWD68rq+zgZjgMEmoyiW1LbW95fxR1EIztHAIkn21nMGx/rc2gtAtDnI9th9KB7IR\nK3F/0R45B2VnAXRTkJ9F4wrE\n-----END PRIVATE KEY-----\n",
+  "client_email": "artstation-scraping@artstation-scraping.iam.gserviceaccount.com",
+  "client_id": "111275355777015231704",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/artstation-scraping%40artstation-scraping.iam.gserviceaccount.com"
+}

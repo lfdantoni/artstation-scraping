@@ -6,6 +6,7 @@ import processRoute from './routes/process.route';
 const app = express()
 const port = process.env.PORT || 5000
 app.use('/downloads', express.static(join(__dirname, Config.localFolderDownload)));
+app.use('/assets', express.static(join(__dirname, Config.assetsFolder)));
 
 app.use(express.json());
 
