@@ -34,7 +34,7 @@ exports.saveImage = (url, folder) => {
         });
     });
 };
-exports.sleep = function sleep(ms) {
+exports.sleep = (ms) => {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
@@ -42,10 +42,10 @@ exports.sleep = function sleep(ms) {
 exports.autoScroll = async (page) => {
     await page.evaluate(async () => {
         await new Promise(resolve => {
-            var totalHeight = 0;
-            var distance = 100;
-            var timer = setInterval(() => {
-                var scrollHeight = document.body.scrollHeight;
+            let totalHeight = 0;
+            const distance = 100;
+            const timer = setInterval(() => {
+                const scrollHeight = document.body.scrollHeight;
                 window.scrollBy(0, distance);
                 totalHeight += distance;
                 if (totalHeight >= scrollHeight) {
@@ -57,19 +57,22 @@ exports.autoScroll = async (page) => {
     });
 };
 exports.createZip = (folderPath) => {
+    // tslint:disable-next-line: no-console
     console.log('createZip: ', folderPath);
     return new Promise(async (resolve, reject) => {
-        const relativeZipPath = `${config_1.Config.localFolderDownload}/${new Date().getTime()}-${folderPath.replace(/\//g, "-")}.zip`;
+        const relativeZipPath = `${config_1.Config.localFolderDownload}/${new Date().getTime()}-${folderPath.replace(/\//g, '-')}.zip`;
         const output = fs_1.createWriteStream(__dirname + `/${relativeZipPath}`);
         const archive = archiver_1.create('zip', {
             zlib: { level: 9 } // Sets the compression level.
         });
-        output.on('close', function () {
+        output.on('close', () => {
+            // tslint:disable-next-line: no-console
             console.log(archive.pointer() + ' total bytes');
+            // tslint:disable-next-line: no-console
             console.log('archiver has been finalized and the output file descriptor has closed.');
             resolve(relativeZipPath);
         });
-        archive.on('error', function (err) {
+        archive.on('error', (err) => {
             reject(err);
         });
         archive.pipe(output);

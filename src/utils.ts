@@ -1,4 +1,4 @@
-import { Page } from "puppeteer";
+import { Page } from 'puppeteer';
 import {existsSync, mkdirSync, createWriteStream} from 'fs';
 import request from 'request';
 import {Config} from './config';
@@ -13,7 +13,7 @@ export const createArtistFolder = (name: string, downloadPath: string = null): F
   const downloadFolderName = downloadPath || Config.localFolderDownload;
   const artistPath =   join(__dirname, downloadFolderName, name);
   const downloadFolderPath = join(__dirname, downloadFolderName);
-  
+
 
   if (!existsSync(downloadFolderPath)){
     mkdirSync(downloadFolderPath);
@@ -43,7 +43,7 @@ export const saveImage = (url: string, folder: FolderConfig): Promise<{fileName:
 
 }
 
-export const sleep = function sleep(ms: number) {
+export const sleep = (ms: number) => {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
@@ -52,10 +52,10 @@ export const sleep = function sleep(ms: number) {
 export const autoScroll = async (page: Page) => {
   await page.evaluate(async () => {
       await new Promise(resolve => {
-          var totalHeight = 0;
-          var distance = 100;
-          var timer = setInterval(() => {
-              var scrollHeight = document.body.scrollHeight;
+          let totalHeight = 0;
+          const distance = 100;
+          const timer = setInterval(() => {
+              const scrollHeight = document.body.scrollHeight;
               window.scrollBy(0, distance);
               totalHeight += distance;
 
@@ -69,21 +69,24 @@ export const autoScroll = async (page: Page) => {
 }
 
 export const createZip = (folderPath: string): Promise<string> => {
+  // tslint:disable-next-line: no-console
   console.log('createZip: ', folderPath)
   return new Promise(async (resolve, reject) => {
-    const relativeZipPath = `${Config.localFolderDownload}/${new Date().getTime()}-${folderPath.replace(/\//g, "-")}.zip`;
+    const relativeZipPath = `${Config.localFolderDownload}/${new Date().getTime()}-${folderPath.replace(/\//g, '-')}.zip`;
     const output = createWriteStream(__dirname + `/${relativeZipPath}`);
     const archive = create('zip', {
       zlib: { level: 9 } // Sets the compression level.
     });
 
-    output.on('close', function() {
+    output.on('close', () => {
+      // tslint:disable-next-line: no-console
       console.log(archive.pointer() + ' total bytes');
+      // tslint:disable-next-line: no-console
       console.log('archiver has been finalized and the output file descriptor has closed.');
       resolve(relativeZipPath);
     });
 
-    archive.on('error', function(err) {
+    archive.on('error', (err: any) => {
       reject(err)
     });
 

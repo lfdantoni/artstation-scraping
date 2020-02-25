@@ -6,6 +6,7 @@ const utils_1 = require("./utils");
 const downloadGallery = async (artist, updateCallback) => {
     const imageSaved = (imageName, imagePath) => {
         if (updateCallback) {
+            // tslint:disable-next-line: no-console
             console.log(`Image ${imageName} saved`);
             updateCallback({ log: `Image ${imageName} saved`, finish: false, imagePath });
         }
@@ -14,6 +15,7 @@ const downloadGallery = async (artist, updateCallback) => {
     const width = 1366;
     const height = 768;
     const userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.100 Safari/537.36';
+    // tslint:disable-next-line: no-console
     console.log('artist: ', artist);
     const browser = await puppeteer_1.launch({
         headless: true,
@@ -32,10 +34,11 @@ const downloadGallery = async (artist, updateCallback) => {
     await utils_1.autoScroll(page);
     const imageThumbs = await page.$$('user-projects:not(.ng-hide) .project-image');
     const folder = utils_1.createArtistFolder(artist);
+    // tslint:disable-next-line: no-console
     console.log(imageThumbs.length);
     const imageTab = await browser.newPage();
-    // for (let i = 0; i < imageThumbs.length; i++) {
-    for (let i = 0; i < 2; i++) {
+    // tslint:disable-next-line: prefer-for-of
+    for (let i = 0; i < imageThumbs.length; i++) {
         const imageThumb = imageThumbs[i];
         const href = await imageThumb.getProperty('href');
         await imageTab.setUserAgent(userAgent);
@@ -43,6 +46,7 @@ const downloadGallery = async (artist, updateCallback) => {
         const anchorsSelector = '.asset-actions a:first-child';
         await imageTab.waitForSelector(anchorsSelector);
         const anchors = await imageTab.$$(anchorsSelector);
+        // tslint:disable-next-line: prefer-for-of
         for (let j = 0; j < anchors.length; j++) {
             const anchor = anchors[j];
             const anchorHref = await anchor.getProperty('href');
