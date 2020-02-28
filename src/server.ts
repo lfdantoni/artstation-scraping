@@ -2,6 +2,7 @@ import express from 'express';
 import {join} from 'path';
 import {Config} from './config';
 import processRoute from './routes/process.route';
+import authorizeRoute from './routes/authorize.route';
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -11,6 +12,7 @@ app.use('/assets', express.static(join(__dirname, Config.assetsFolder)));
 app.use(express.json());
 
 app.use(processRoute.path, processRoute.router);
+app.use(authorizeRoute.path, authorizeRoute.router);
 // app.get('/process/:artist',
 //   async (req, res) =>{
 //     const hostname = req.headers.host;
