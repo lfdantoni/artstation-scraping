@@ -109,3 +109,4 @@ dist
 downloads/*
 build/downloads
 credentials.json
+tokens.json

@@ -15,6 +15,10 @@ export class GDriveService {
         client_id, client_secret, redirectUri);
   }
 
+  public setCredentials(tokens: any) {
+    this.oAuth2Client.setCredentials(tokens);
+  }
+
   public getAuthUrl() {
     if(!this.oAuth2Client) throw Error('The service has not been setting up, call to setUp method.');
 
@@ -24,24 +28,13 @@ export class GDriveService {
     });
   }
 
-  public getToken(code: string): Promise<any> {
+  public async getToken(code: string): Promise<any> {
     if(!this.oAuth2Client) throw Error('The service has not been setting up, call to setUp method.');
-
-    return this.oAuth2Client.getToken(code);
-    // this.oAuth2Client.getToken(code, (err: any, token: any) => {
-    //   if (err) return console.error('Error retrieving access token', err);
-    //   this.oAuth2Client.setCredentials(token);
-      // Store the token to disk for later program executions
-      // fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err: any) => {
-      //   if (err) return console.error(err);
-      //   console.log('Token stored to', TOKEN_PATH);
-      // });
-      // callback(oAuth2Client);
-    // });
+    const tokens = (await this.oAuth2Client.getToken(code)).tokens;
+    return Promise.resolve(tokens);
   }
 
-  public listFiles(tokens: any): Promise<any[]> {
-    this.oAuth2Client.setCredentials(tokens.tokens);
+  public listFiles(): Promise<any[]> {
     const drive = google.drive({version: 'v3', auth:  this.oAuth2Client});
 
     return new Promise((resolve, reject) => {
@@ -72,17 +65,12 @@ export class GDriveService {
     
   }
 
-  public async uploadFile(tokens: any) {
-    this.oAuth2Client.setCredentials(tokens.tokens);
+  public async uploadFile(folderId: string) {
     const drive = new drive_v3.Drive({auth: this.oAuth2Client})
-    // const drive = google.drive({
-    //   version: 'v3',
-    //   auth: oauth2Client
-    // });
-    
+
     const res = await drive.files.create({
       requestBody: {
-        // parents: ['1axRoaSMayKRWALMU15Xo5OGc1Cn2VM9x'], // youtube folder
+        parents: [folderId], // youtube folder
         name: 'image_upload_test.jpg',
         mimeType: 'image/jpg'
       },
@@ -95,9 +83,32 @@ export class GDriveService {
     console.log('uploadFile ', res.data);
   }
 
+  public async createFolder(name: string): Promise<string> {
+    const drive = new drive_v3.Drive({auth: this.oAuth2Client});
+
+    const fileMetadata = {
+      'name': name,
+      'mimeType': 'application/vnd.google-apps.folder'
+    };
+
+    return new Promise(async(resolve, reject) => {
+      try {
+        const resp = await drive.files.create({
+          requestBody: fileMetadata,
+          fields: 'id'
+        });
+
+        resolve(resp.data.id);
+
+      } catch (error) {
+        reject(error);
+      }
+    })
+  }
+
   private getCredentials(): any {
     try {
-      const content: any = readFileSync('credentials.json');
+      const content: any = readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS);
       return JSON.parse(content);
     } catch (error) {
       console.log('Error loading client secret file:', error);

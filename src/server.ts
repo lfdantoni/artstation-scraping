@@ -4,6 +4,8 @@ import {Config} from './config';
 import processRoute from './routes/process.route';
 import authorizeRoute from './routes/authorize.route';
 
+require('dotenv').config();
+
 const app = express()
 const port = process.env.PORT || 5000
 app.use('/downloads', express.static(join(__dirname, Config.localFolderDownload)));

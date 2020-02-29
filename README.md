@@ -19,6 +19,7 @@ Table Contents
 ### Code
 
 https://medium.com/create-a-server-with-nodemon-express-typescript/create-a-server-with-nodemon-express-typescript-f7c88fb5ee71
+https://github.com/codex-team/editor.js
 
 ### Visual Studio Code IDE
 

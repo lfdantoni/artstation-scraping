@@ -1,6 +1,7 @@
 import { Route } from './route';
 import { Router, Request, Response, response } from 'express';
 import { GDriveService } from '../services/gdrive.service';
+import { FileManagerHelper } from '../helpers/file-manager.helper';
 
 class AuthorizeRoute implements Route {
   router: Router;
@@ -8,6 +9,8 @@ class AuthorizeRoute implements Route {
 
   private gDriveService: GDriveService;
 
+  // TODO replace it for DB
+  private tokenPath = 'tokens.json'
 
   constructor() {
     this.gDriveService = new GDriveService();
@@ -22,11 +25,15 @@ class AuthorizeRoute implements Route {
 
     if(req.query.code) {
       const token = await this.gDriveService.getToken(req.query.code);
+      FileManagerHelper.saveJsonFile(this.tokenPath, token);
       console.log(token)
       
-      await this.gDriveService.uploadFile(token);
-      
-      resp.json(await this.gDriveService.listFiles(token));
+      this.gDriveService.setCredentials(token);
+
+      // TODO add logic to save folder id by user
+      await this.gDriveService.uploadFile('1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ');
+
+      resp.json(await this.gDriveService.listFiles());
     } else {
       console.log(this.gDriveService.getAuthUrl())
       resp.redirect(this.gDriveService.getAuthUrl());
