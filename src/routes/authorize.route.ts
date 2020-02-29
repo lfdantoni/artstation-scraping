@@ -33,9 +33,10 @@ class AuthorizeRoute implements Route {
       this.gDriveService.setCredentials(token);
 
       // TODO add logic to save folder id by user
-      await this.gDriveService.uploadFile('1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ');
+      const folderId = '1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ';
+      await this.gDriveService.uploadFile(folderId);
 
-      resp.json(await this.gDriveService.listFiles());
+      resp.json(await this.gDriveService.listFiles(folderId));
     } else {
       console.log(this.gDriveService.getAuthUrl())
       resp.redirect(this.gDriveService.getAuthUrl());

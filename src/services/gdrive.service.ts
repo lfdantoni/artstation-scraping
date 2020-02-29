@@ -34,12 +34,13 @@ export class GDriveService {
     return Promise.resolve(tokens);
   }
 
-  public listFiles(): Promise<any[]> {
+  public listFiles(folderId: string): Promise<any[]> {
     const drive = google.drive({version: 'v3', auth:  this.oAuth2Client});
 
     return new Promise((resolve, reject) => {
 
       drive.files.list({
+        q: `'${folderId}' in parents and mimeType != 'application/vnd.google-apps.folder' and trashed = false`,
         pageSize: 10,
         fields: 'nextPageToken, files(id, name)',
       }, (err: any, res: any) => {
