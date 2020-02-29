@@ -1,4 +1,4 @@
-import {readFileSync, createReadStream} from 'fs';
+import {createReadStream} from 'fs';
 import {drive_v3, google} from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
 
@@ -8,9 +8,8 @@ export class GDriveService {
   private oAuth2Client: OAuth2Client;
 
   public setUp(redirectUri: string) {
-    const credentials = this.getCredentials();
+    const {client_secret, client_id} = this.getCredentials();
 
-    const {client_secret, client_id} = credentials.web;
     this.oAuth2Client = new google.auth.OAuth2(
         client_id, client_secret, redirectUri);
   }
@@ -106,13 +105,10 @@ export class GDriveService {
     })
   }
 
-  private getCredentials(): any {
-    try {
-      const content: any = readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS);
-      return JSON.parse(content);
-    } catch (error) {
-      console.log('Error loading client secret file:', error);
-      throw error;
+  private getCredentials():  {client_secret: string, client_id: string} {
+    return {
+      client_id: process.env.GD_CLIENT_ID,
+      client_secret: process.env.GD_CLIENT_SECRET
     }
   }
 }
