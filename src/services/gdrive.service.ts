@@ -1,3 +1,4 @@
+// tslint:disable: no-console
 import {createReadStream} from 'fs';
 import {drive_v3, google} from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
@@ -61,7 +62,6 @@ export class GDriveService {
         }
       });
     })
-    
   }
 
   public async uploadFile(folderId: string) {
@@ -335,7 +335,7 @@ export class GDriveService {
 //     version: 'v3',
 //     auth: oauth2Client
 //   });
-  
+
 //   const res = await drive.files.create({
 //     requestBody: {
 //       name: 'Test',
@@ -356,7 +356,7 @@ export class GDriveService {
 //   //   version: 'v3',
 //   //   auth: oauth2Client
 //   // });
-  
+
 //   const res = await drive.files.create({
 //     requestBody: {
 //       parents: ['1axRoaSMayKRWALMU15Xo5OGc1Cn2VM9x'], // youtube folder

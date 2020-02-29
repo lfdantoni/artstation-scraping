@@ -4,6 +4,7 @@ import {Config} from './config';
 import processRoute from './routes/process.route';
 import authorizeRoute from './routes/authorize.route';
 
+// tslint:disable-next-line: no-var-requires
 require('dotenv').config();
 
 const app = express()

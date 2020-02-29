@@ -1,3 +1,4 @@
+// tslint:disable: no-console
 import { Route } from './route';
 import { Router, Request, Response, response } from 'express';
 import { GDriveService } from '../services/gdrive.service';
@@ -27,7 +28,7 @@ class AuthorizeRoute implements Route {
       const token = await this.gDriveService.getToken(req.query.code);
       FileManagerHelper.saveJsonFile(this.tokenPath, token);
       console.log(token)
-      
+
       this.gDriveService.setCredentials(token);
 
       // TODO add logic to save folder id by user
