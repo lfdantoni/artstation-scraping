@@ -20,7 +20,8 @@ class AuthorizeRoute implements Route {
   }
 
   private validateCode = async (req: Request, resp: Response) => {
-    const fullReqUrl = req.protocol + '://' + req.get('host') + this.path;
+    const protocol = process.env.ENVIRONMENT==='local' ? 'http' : 'https';
+    const fullReqUrl = protocol + '://' + req.get('host') + this.path;
     console.log(fullReqUrl);
     this.gDriveService.setUp(fullReqUrl);
 
