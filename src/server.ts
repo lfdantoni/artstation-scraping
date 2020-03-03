@@ -1,8 +1,11 @@
 import express from 'express';
 import {join} from 'path';
 import {Config} from './config';
+import {appContainer} from './ioc/container';
+import {TYPES} from './ioc/constants/types';
 import processRoute from './routes/process.route';
-import authorizeRoute from './routes/authorize.route';
+import { IRoute } from './routes/route';
+import { CONTROLLER_TAGS } from './ioc/constants/controllers';
 
 // tslint:disable-next-line: no-var-requires
 require('dotenv').config();
@@ -14,33 +17,10 @@ app.use('/assets', express.static(join(__dirname, Config.assetsFolder)));
 
 app.use(express.json());
 
+const authRouter = appContainer.getNamed<IRoute>(TYPES.Controller, CONTROLLER_TAGS.Authorize);
+
 app.use(processRoute.path, processRoute.router);
-app.use(authorizeRoute.path, authorizeRoute.router);
-// app.get('/process/:artist',
-//   async (req, res) =>{
-//     const hostname = req.headers.host;
-//     res.write(`<html><head></head><body>`);
-//     res.write("Processing...<br>");
-
-//     await downloadGallery(req.params.artist, (state: ImageState) => {
-//       if (state.finish) {
-//         console.log('downloadGallery: ', state.log);
-//         res.write(`<div>${state.log}</div>`);
-//         return;
-//       }
-
-//       console.log('downloadGallery: ', state.log);
-//       const imageUrl = `${req.protocol}://${hostname}/${state.imagePath}`;
-//       res.write(`<a target="_blank" href="${imageUrl}"><img src="${imageUrl}" style="height: 50%"></a>`);
-//     });
-
-//     const zipPath = await createZip(`${Config.localFolderDownload}/${req.params.artist}`);
-//     const sipUrl = `${req.protocol}://${hostname}/${zipPath}`;
-//     res.write(`<a target="_blank" href="${sipUrl}">ZIP</a><br>`);
-
-//     res.write(`Finish!</body></html>`);
-//     res.end();
-// })
+app.use(authRouter.path, authRouter.router);
 
 // tslint:disable-next-line: no-console
 app.listen(port, () => console.log(`Example app listening on port ${port}! -> http://localhost:${port}`));

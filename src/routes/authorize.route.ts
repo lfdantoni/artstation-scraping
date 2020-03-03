@@ -1,23 +1,23 @@
 // tslint:disable: no-console
-import { Route } from './route';
-import { Router, Request, Response, response } from 'express';
+import { IRoute } from './route';
+import { Router, Request, Response } from 'express';
 import { GDriveService } from '../services/gdrive.service';
 import { FileManagerHelper } from '../helpers/file-manager.helper';
 import { GOAuthService } from '../services/goauth.service';
+import { injectable, inject } from 'inversify';
+import { TYPES } from '../ioc/constants/types';
 
-class AuthorizeRoute implements Route {
+@injectable()
+export class AuthorizeRoute implements IRoute {
   router: Router;
   path: string = '/authorize';
-
-  private gDriveService: GDriveService;
-  private oauthService: GOAuthService;
 
   // TODO replace it for DB
   private tokenPath = 'tokens.json'
 
-  constructor() {
-    this.oauthService = new GOAuthService();
-    this.gDriveService = new GDriveService(this.oauthService.oAuth2Client);
+  constructor(
+    @inject(TYPES.OAuth) private oauthService: GOAuthService,
+    @inject(TYPES.FileStorage) private gDriveService: GDriveService ) {
     this.router = Router();
     this.config();
   }
@@ -58,6 +58,3 @@ class AuthorizeRoute implements Route {
     this.router.get('/', this.validateCode);
   }
 }
-
-const authorizeRoute = new AuthorizeRoute();
-export default authorizeRoute;

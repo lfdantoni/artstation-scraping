@@ -9,6 +9,9 @@
     "sourceMap": false,
     "outDir": "build",
     "baseUrl": ".",
+    "types": ["reflect-metadata"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "paths": {
       "*": [
         "node_modules/*",

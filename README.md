@@ -21,6 +21,7 @@ Table Contents
 https://medium.com/create-a-server-with-nodemon-express-typescript/create-a-server-with-nodemon-express-typescript-f7c88fb5ee71
 https://github.com/codex-team/editor.js
 https://developers.google.com/drive/api/v3
+https://github.com/inversify/InversifyJS
 
 ### Visual Studio Code IDE
 

@@ -2,7 +2,9 @@ import { OAuth2Client } from 'google-auth-library';
 import { google } from 'googleapis';
 import {config} from 'dotenv';
 import {decode} from 'jsonwebtoken';
+import { injectable } from 'inversify';
 
+@injectable()
 export class GOAuthService {
   private SCOPES = [
     'https://www.googleapis.com/auth/drive.file',

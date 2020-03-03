@@ -1,14 +1,17 @@
 // tslint:disable: no-console
 import {createReadStream} from 'fs';
 import {drive_v3, google} from 'googleapis';
-import { OAuth2Client } from 'google-auth-library';
+import { inject, injectable } from 'inversify';
+import { TYPES } from '../ioc/constants/types';
+import { GOAuthService } from './goauth.service';
 
+@injectable()
 export class GDriveService {
 
-  constructor(private oAuth2Client: OAuth2Client) { }
+  constructor(@inject(TYPES.OAuth) private oAuthService: GOAuthService) { }
 
   public listFiles(folderId: string): Promise<any[]> {
-    const drive = google.drive({version: 'v3', auth:  this.oAuth2Client});
+    const drive = google.drive({version: 'v3', auth:  this.oAuthService.oAuth2Client});
 
     return new Promise((resolve, reject) => {
 
@@ -35,7 +38,7 @@ export class GDriveService {
   }
 
   public async uploadFile(folderId: string) {
-    const drive = new drive_v3.Drive({auth: this.oAuth2Client})
+    const drive = new drive_v3.Drive({auth: this.oAuthService.oAuth2Client})
 
     const res = await drive.files.create({
       requestBody: {
@@ -53,7 +56,7 @@ export class GDriveService {
   }
 
   public async createFolder(name: string): Promise<string> {
-    const drive = new drive_v3.Drive({auth: this.oAuth2Client});
+    const drive = new drive_v3.Drive({auth: this.oAuthService.oAuth2Client});
 
     const fileMetadata = {
       'name': name,

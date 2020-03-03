@@ -1,8 +1,8 @@
-import { Route } from './route';
+import { IRoute } from './route';
 import { Router, Request, Response } from 'express';
 import { ScrapingProcessOptions, ImageState, ArtStationScrapingService } from '../services/artstation-scraping.service';
 
-class ProcessRoute implements Route{
+class ProcessRoute implements IRoute {
   router: Router;
   path: string = '/process';
 
