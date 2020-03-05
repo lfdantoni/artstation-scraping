@@ -6,6 +6,7 @@ import { FileManagerHelper } from '../helpers/file-manager.helper';
 import { GOAuthService } from '../services/goauth.service';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '../ioc/constants/types';
+import UserModel from '../models/user.model';
 
 @injectable()
 export class AuthorizeRoute implements IRoute {
@@ -40,6 +41,21 @@ export class AuthorizeRoute implements IRoute {
       const folderId = '1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ';
       await this.gDriveService.uploadFile(folderId);
       const userInfo = this.oauthService.getUserInfo() || { };
+
+      const userSaved = await UserModel.findOne({gId: userInfo.sub});
+
+      if (!userSaved) {
+        await UserModel
+          .create({
+            name: userInfo.name,
+            email: userInfo.email,
+            gId: userInfo.sub
+          });
+      } else {
+        await userSaved.updateOne({
+          email: userInfo.email+ (new Date()).getTime()
+        })
+      }
 
       resp.json({
         userName: userInfo.name,
