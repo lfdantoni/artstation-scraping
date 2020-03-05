@@ -4,6 +4,8 @@ import {config} from 'dotenv';
 import {decode} from 'jsonwebtoken';
 import { injectable } from 'inversify';
 
+config();
+
 @injectable()
 export class GOAuthService {
   private SCOPES = [
@@ -56,8 +58,6 @@ export class GOAuthService {
   }
 
   private getCredentials():  {client_secret: string, client_id: string} {
-    config();
-
     return {
       client_id: process.env.GD_CLIENT_ID,
       client_secret: process.env.GD_CLIENT_SECRET

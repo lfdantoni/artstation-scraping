@@ -1,8 +1,10 @@
 import { IRoute } from './route';
 import { Router, Request, Response } from 'express';
 import { ScrapingProcessOptions, ImageState, ArtStationScrapingService } from '../services/artstation-scraping.service';
+import { injectable } from 'inversify';
 
-class ProcessRoute implements IRoute {
+@injectable()
+export class ProcessRoute implements IRoute {
   router: Router;
   path: string = '/process';
 
@@ -37,6 +39,3 @@ class ProcessRoute implements IRoute {
     this.router.post('/', this.enqueueProcess);
   }
 }
-
-const processRoute = new ProcessRoute();
-export default processRoute;
