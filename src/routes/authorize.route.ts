@@ -6,7 +6,7 @@ import { FileManagerHelper } from '../helpers/file-manager.helper';
 import { GOAuthService } from '../services/goauth.service';
 import { injectable, inject } from 'inversify';
 import { TYPES } from '../ioc/constants/types';
-import UserModel from '../models/user.model';
+import { UserService } from '../services/users.service';
 
 @injectable()
 export class AuthorizeRoute implements IRoute {
@@ -18,7 +18,8 @@ export class AuthorizeRoute implements IRoute {
 
   constructor(
     @inject(TYPES.OAuth) private oauthService: GOAuthService,
-    @inject(TYPES.FileStorage) private gDriveService: GDriveService ) {
+    @inject(TYPES.FileStorage) private gDriveService: GDriveService,
+    @inject(TYPES.UserService) private userService: UserService ) {
     this.router = Router();
     this.config();
   }
@@ -42,19 +43,19 @@ export class AuthorizeRoute implements IRoute {
       await this.gDriveService.uploadFile(folderId);
       const userInfo = this.oauthService.getUserInfo() || { };
 
-      const userSaved = await UserModel.findOne({gId: userInfo.sub});
+      const userSaved = await this.userService.getUserByGId(userInfo.sub);
 
       if (!userSaved) {
-        await UserModel
-          .create({
+        await this.userService
+          .createUser({
             name: userInfo.name,
             email: userInfo.email,
-            gId: userInfo.sub
+            gId: userInfo.sub,
+            credential: token
           });
       } else {
-        await userSaved.updateOne({
-          email: userInfo.email+ (new Date()).getTime()
-        })
+        const userWithCredential = await this.userService.getUserWithCredential(userSaved.id);
+        console.log('existe user! ', userWithCredential);
       }
 
       resp.json({

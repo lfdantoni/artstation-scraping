@@ -7,11 +7,15 @@ import { TYPES } from './constants/types';
 import { GDriveService } from '../services/gdrive.service';
 import { GOAuthService } from '../services/goauth.service';
 import { ProcessRoute } from '../routes/process.route';
+import { UserService } from '../services/users.service';
 
 const appContainer = new Container();
 appContainer.bind<GOAuthService>(TYPES.OAuth).to(GOAuthService).inSingletonScope();
 appContainer.bind<GDriveService>(TYPES.FileStorage).to(GDriveService);
 appContainer.bind<IRoute>(TYPES.Controller).to(AuthorizeRoute).whenTargetNamed(CONTROLLER_TAGS.Authorize);
 appContainer.bind<IRoute>(TYPES.Controller).to(ProcessRoute).whenTargetNamed(CONTROLLER_TAGS.Process);
+
+// Services
+appContainer.bind<UserService>(TYPES.UserService).to(UserService);
 
 export {appContainer};
