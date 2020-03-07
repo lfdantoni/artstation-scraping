@@ -37,34 +37,20 @@ export class AuthorizeRoute implements IRoute {
       console.log(token)
 
       this.oauthService.setCredentials(token);
+      const userInfo = this.oauthService.getUserInfo() || { };
 
       // TODO add logic to save folder id by user
       const folderId = '1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ';
       await this.gDriveService.uploadFile(folderId);
-      const userInfo = this.oauthService.getUserInfo() || { };
 
-      const userSaved = await this.userService.getUserByGId(userInfo.sub);
+      const userSaved = await this.userService.createOrUpdateUser({
+        name: userInfo.name,
+        email: userInfo.email,
+        gId: userInfo.sub,
+        credential: token
+      });
 
-      if (!userSaved) {
-        await this.userService
-          .createUser({
-            name: userInfo.name,
-            email: userInfo.email,
-            gId: userInfo.sub,
-            credential: token
-          });
-      } else {
-        const userWithCredential = await this.userService.getUserWithCredential(userSaved.id);
-        console.log('existe user! ', userWithCredential);
-      }
-
-      resp.json({
-        userName: userInfo.name,
-        userEmail: userInfo.email,
-        userPicture: userInfo.picture,
-        userId: userInfo.sub,
-        files: await this.gDriveService.listFiles(folderId)
-      })
+      resp.json(userSaved);
     } else {
       console.log(this.oauthService.getAuthUrl(fullReqUrl))
       resp.redirect(this.oauthService.getAuthUrl(fullReqUrl));

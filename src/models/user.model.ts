@@ -1,6 +1,5 @@
-import {Schema, Document, model, Model} from 'mongoose';
+import {Schema, Document, model, Model, Types} from 'mongoose';
 import { IUser } from '../interfaces/entities/user.entity';
-import { IGCredentialModel } from './gcredential.model';
 
 const userSchema = new Schema({
   gId: String,
@@ -17,16 +16,34 @@ export interface IUserDocument extends IUser, Document {
 }
 
 export interface IUserModel extends Model<IUserDocument> {
-  findWithGCredentials(id: string): Promise<IUserPopulated>;
-}
-
-export interface IUserPopulated extends IUser {
-  credential: IGCredentialModel;
+  findByGidWithGCredentials(gId: string): Promise<IUserDocument>;
+  findWithGCredentials(id: string): Promise<IUserDocument>;
+  createOrUpdateUser(user: IUser): Promise<IUser>;
 }
 
 // Static methods
-userSchema.statics.findWithGCredentials = async function(id: string): Promise<IUserPopulated> {
-  return this.findById(id).populate('credential').exec()
+userSchema.statics.findByGidWithGCredentials = async function(gId: string): Promise<IUserDocument> {
+  return this.findOne({gId}).populate('credential').exec();
+}
+
+userSchema.statics.findWithGCredentials = async function(id: string): Promise<IUserDocument> {
+  return this.findById(id).populate('credential').exec();
+}
+
+userSchema.statics.createOrUpdateUser = async function(user: IUser): Promise<IUser> {
+  if(user.id) {
+    await this.updateOne({_id: Types.ObjectId(user.id)},
+    {
+      ...user,
+      credential: Types.ObjectId(user.credentialId)
+    })
+    return Promise.resolve(user)
+  } else {
+    return new UserModel({
+      ...user,
+      credential: Types.ObjectId(user.credentialId)
+    }).save()
+  }
 }
 
 userSchema.virtual('credentialId').get(function() {

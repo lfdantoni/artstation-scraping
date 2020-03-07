@@ -8,6 +8,7 @@ import { GDriveService } from '../services/gdrive.service';
 import { GOAuthService } from '../services/goauth.service';
 import { ProcessRoute } from '../routes/process.route';
 import { UserService } from '../services/users.service';
+import { CredentialService } from '../services/credential.service';
 
 const appContainer = new Container();
 appContainer.bind<GOAuthService>(TYPES.OAuth).to(GOAuthService).inSingletonScope();
@@ -17,5 +18,6 @@ appContainer.bind<IRoute>(TYPES.Controller).to(ProcessRoute).whenTargetNamed(CON
 
 // Services
 appContainer.bind<UserService>(TYPES.UserService).to(UserService);
+appContainer.bind<CredentialService>(TYPES.CredentialService).to(CredentialService);
 
 export {appContainer};
