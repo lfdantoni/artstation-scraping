@@ -8,6 +8,9 @@
         "quotemark": [
           true,
           "single"
+        ],
+        "only-arrow-functions": [
+            false
         ]
     },
     "rulesDirectory": []
