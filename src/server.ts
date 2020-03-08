@@ -6,9 +6,17 @@ import {TYPES} from './ioc/constants/types';
 import { IRoute } from './routes/route';
 import { CONTROLLER_TAGS } from './ioc/constants/controllers';
 import { MongooseDB } from './models/db';
+import basicAuth from 'express-basic-auth';
 
 // tslint:disable-next-line: no-var-requires
 require('dotenv').config();
+
+const staticUserAuth = basicAuth({
+  users: {
+      [process.env.ADM_USER]: process.env.ADM_PASS
+  },
+  challenge: false
+})
 
 MongooseDB.connect()
 .then(() => {
@@ -23,7 +31,7 @@ MongooseDB.connect()
   const processRouter = appContainer.getNamed<IRoute>(TYPES.Controller, CONTROLLER_TAGS.Process);
 
   app.use(authRouter.path, authRouter.router);
-  app.use(processRouter.path, processRouter.router);
+  app.use(processRouter.path, staticUserAuth, processRouter.router);
 
   // tslint:disable-next-line: no-console
   app.listen(port, () => console.log(`Example app listening on port ${port}! -> http://localhost:${port}`));
