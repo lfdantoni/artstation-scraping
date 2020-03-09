@@ -10,7 +10,7 @@ export interface ImageState {
 }
 
 export interface ScrapingProcessOptions {
-  updateCallback?: (resp: ImageState) => void;
+  updateCallback?: (resp: ImageState) => Promise<void>;
   artistId: string;
 }
 
@@ -78,26 +78,26 @@ export class ArtStationScrapingService {
         await sleep(waitTime);
 
         const response = await saveImage(anchorHrefValue, folder);
-        this.imageSaved(response.fileName, response.relativeFilePath);
+        await this.imageSaved(response.fileName, response.relativeFilePath);
       }
     }
 
     await browser.close();
 
-    this.processFinished();
+    await this.processFinished();
   }
 
-  private imageSaved(imageName: string, imagePath: string) {
+  private async imageSaved(imageName: string, imagePath: string) {
     if (this.config.updateCallback) {
       // tslint:disable-next-line: no-console
       console.log(`Image ${imageName} saved`)
-      this.config.updateCallback({log: `Image ${imageName} saved`, finish: false, imagePath, imageName})
+      await this.config.updateCallback({log: `Image ${imageName} saved`, finish: false, imagePath, imageName})
     }
   }
 
-  private processFinished() {
+  private async processFinished() {
     if (this.config.updateCallback) {
-      this.config.updateCallback({log: 'Process finished', finish: true});
+      await this.config.updateCallback({log: 'Process finished', finish: true});
     }
   }
 }
