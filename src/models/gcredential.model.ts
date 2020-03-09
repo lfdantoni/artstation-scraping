@@ -12,6 +12,8 @@ const gCredentialSchema = new Schema({
   access_token: String,
   refresh_token: String,
   id_token: String,
+  expiry_date: Number,
+  token_type: String
 },
 {timestamps: true});
 

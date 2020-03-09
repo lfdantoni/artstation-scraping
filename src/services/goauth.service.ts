@@ -26,7 +26,13 @@ export class GOAuthService {
 
   public setCredentials(tokens: any) {
     this.credentials = tokens;
-    this.oAuth2Client.setCredentials(tokens);
+    this.oAuth2Client.setCredentials({
+      access_token: tokens.access_token,
+      expiry_date: tokens.expiry_date,
+      id_token: tokens.id_token,
+      refresh_token: tokens.refresh_token,
+      token_type: tokens.token_type
+    });
   }
 
   public getAuthUrl(redirectUri?: string) {

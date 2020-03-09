@@ -12,7 +12,7 @@ export class GDriveService {
 
   constructor(@inject(TYPES.OAuth) private oAuthService: GOAuthService) { }
 
-  public listFiles(folderId: string, credential?: IGCredential): Promise<any[]> {
+  public async listFiles(folderId: string, credential?: IGCredential): Promise<any[]> {
     this.checkCredential(credential);
 
     const drive = google.drive({version: 'v3', auth:  this.oAuthService.oAuth2Client});
