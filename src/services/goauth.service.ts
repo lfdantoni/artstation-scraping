@@ -1,8 +1,8 @@
-import { OAuth2Client } from 'google-auth-library';
-import { google } from 'googleapis';
 import {config} from 'dotenv';
+import {OAuth2Client} from 'google-auth-library';
+import {google} from 'googleapis';
+import {injectable} from 'inversify';
 import {decode} from 'jsonwebtoken';
-import { injectable } from 'inversify';
 
 config();
 

@@ -1,12 +1,12 @@
 // tslint:disable: no-console
-import { IRoute } from './route';
-import { Router, Request, Response } from 'express';
-import { GDriveService } from '../services/gdrive.service';
-import { FileManagerHelper } from '../helpers/file-manager.helper';
-import { GOAuthService } from '../services/goauth.service';
-import { injectable, inject } from 'inversify';
-import { TYPES } from '../ioc/constants/types';
-import { UserService } from '../services/users.service';
+import {Request, Response, Router} from 'express';
+import {inject, injectable} from 'inversify';
+import {FileManagerHelper} from '../helpers/file-manager.helper';
+import {TYPES} from '../ioc/constants/types';
+import {GDriveService} from '../services/gdrive.service';
+import {GOAuthService} from '../services/goauth.service';
+import {UserService} from '../services/users.service';
+import {IRoute} from './route';
 
 @injectable()
 export class AuthorizeRoute implements IRoute {
@@ -36,12 +36,10 @@ export class AuthorizeRoute implements IRoute {
       FileManagerHelper.saveJsonFile(this.tokenPath, token);
       console.log(token)
 
+      // TODO add logic to check if I've received the refresh_token
+
       this.oauthService.setCredentials(token);
       const userInfo = this.oauthService.getUserInfo() || { };
-
-      // TODO add logic to save folder id by user
-      // const folderId = '1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ';
-      // await this.gDriveService.uploadFile(folderId);
 
       const userSaved = await this.userService.createOrUpdateUser({
         name: userInfo.name,

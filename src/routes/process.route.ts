@@ -1,10 +1,10 @@
-import { IRoute } from './route';
-import { Router, Request, Response } from 'express';
-import { ScrapingProcessOptions, ImageState, ArtStationScrapingService } from '../services/artstation-scraping.service';
-import { injectable, inject } from 'inversify';
-import { TYPES } from '../ioc/constants/types';
-import { GDriveService } from '../services/gdrive.service';
-import { UserService } from '../services/users.service';
+import {Request, Response, Router} from 'express';
+import {inject, injectable} from 'inversify';
+import {TYPES} from '../ioc/constants/types';
+import {ArtStationScrapingService, ImageState, ScrapingProcessOptions} from '../services/artstation-scraping.service';
+import {GDriveService} from '../services/gdrive.service';
+import {UserService} from '../services/users.service';
+import {IRoute} from './route';
 
 @injectable()
 export class ProcessRoute implements IRoute {
@@ -18,7 +18,8 @@ export class ProcessRoute implements IRoute {
   }
 
   private async enqueueProcess(req: Request, resp: Response) {
-    const {artistId, userId} = req.body;
+    const {artistId, userId, createRootFolder} = req.body;
+    let rootFolderId = '';
 
     if (!artistId || !userId) {
       resp.status(400);
@@ -38,7 +39,16 @@ export class ProcessRoute implements IRoute {
       return;
     }
 
-    const artistFolderId = await this.fileStorage.createFolder(artistId, userData.credential, '1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ');
+
+    // TODO save the folderId to db
+    if (createRootFolder) {
+      rootFolderId = await this.fileStorage.createFolder('ArtStationScrapingApp', userData.credential);
+    } else {
+      // TODO remove this
+      rootFolderId = '1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ';
+    }
+
+    const artistFolderId = await this.fileStorage.createFolder(artistId, userData.credential, rootFolderId);
 
     const serviceOptions: ScrapingProcessOptions = {
       artistId,
