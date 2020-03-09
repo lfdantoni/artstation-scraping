@@ -108,5 +108,6 @@ dist
 
 downloads/*
 build/downloads
+src/downloads
 credentials.json
 tokens.json

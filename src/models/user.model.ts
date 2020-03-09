@@ -22,6 +22,7 @@ export interface IUserModel extends Model<IUserDocument> {
 }
 
 // Static methods
+// don't use arrow functions in order to preserve the mongoose context
 userSchema.statics.findByGidWithGCredentials = async function(gId: string): Promise<IUserDocument> {
   return this.findOne({gId}).populate('credential').exec();
 }

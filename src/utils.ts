@@ -11,8 +11,8 @@ export interface FolderConfig {
 
 export const createArtistFolder = (name: string, downloadPath: string = null): FolderConfig => {
   const downloadFolderName = downloadPath || Config.localFolderDownload;
-  const artistPath =   join(__dirname, downloadFolderName, name);
-  const downloadFolderPath = join(__dirname, downloadFolderName);
+  const artistPath = join(downloadFolderName, name);
+  const downloadFolderPath = join(downloadFolderName);
 
 
   if (!existsSync(downloadFolderPath)){
@@ -31,11 +31,10 @@ export const createArtistFolder = (name: string, downloadPath: string = null): F
 export const saveImage = (url: string, folder: FolderConfig): Promise<{fileName: string, relativeFilePath: string}> => {
   const fileName = `${new Date().getTime()}-${url.split('/').pop().split('#')[0].split('?')[0]}`;
   const relativeFilePath = `${folder.relativeArtistPath}/${fileName}`;
-  const filePathToSave =join(__dirname, relativeFilePath);
 
   return new Promise((resolve) => {
     request(url)
-    .pipe(createWriteStream(filePathToSave))
+    .pipe(createWriteStream(relativeFilePath))
     .on('close', () => {
       resolve({fileName, relativeFilePath});
     });

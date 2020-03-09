@@ -6,6 +6,7 @@ export interface ImageState {
   finish: boolean;
   log: string;
   imagePath?: string;
+  imageName?: string;
 }
 
 export interface ScrapingProcessOptions {
@@ -68,8 +69,7 @@ export class ArtStationScrapingService {
       const anchors = await imageTab.$$(anchorsSelector);
 
       for(const anchor of anchors) {
-      // for (let j = 0; j < anchors.length; j++) {
-        // const anchor = anchors[j];
+
         const anchorHref = await anchor.getProperty('href');
         const anchorHrefValue = await anchorHref.jsonValue() as string;
 
@@ -91,7 +91,7 @@ export class ArtStationScrapingService {
     if (this.config.updateCallback) {
       // tslint:disable-next-line: no-console
       console.log(`Image ${imageName} saved`)
-      this.config.updateCallback({log: `Image ${imageName} saved`, finish: false, imagePath})
+      this.config.updateCallback({log: `Image ${imageName} saved`, finish: false, imagePath, imageName})
     }
   }
 

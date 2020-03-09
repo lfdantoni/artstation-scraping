@@ -40,8 +40,8 @@ export class AuthorizeRoute implements IRoute {
       const userInfo = this.oauthService.getUserInfo() || { };
 
       // TODO add logic to save folder id by user
-      const folderId = '1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ';
-      await this.gDriveService.uploadFile(folderId);
+      // const folderId = '1CWFoXbhTjGKxOaBofIdii7P5v-lbbKqZ';
+      // await this.gDriveService.uploadFile(folderId);
 
       const userSaved = await this.userService.createOrUpdateUser({
         name: userInfo.name,
