@@ -27,7 +27,7 @@ function start() {
 
   workQueue.process(maxJobsPerWorker, async (job) => {
     // tslint:disable-next-line: no-console
-    console.log(job)
+    console.log(job.id)
     // This is an example job that just slowly reports on progress
     // while doing no work. Replace this with your own job logic.
     let progress = 0;
