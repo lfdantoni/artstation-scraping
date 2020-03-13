@@ -1,0 +1,13 @@
+{
+  "ignore": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    ".git",
+    "node_modules"
+  ],
+  "watch": [
+    "src/worker"
+  ],
+  "exec": "npm run dev:worker",
+  "ext": "ts"
+}

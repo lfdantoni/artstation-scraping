@@ -10,8 +10,8 @@ const path_1 = require("path");
 const archiver_1 = require("archiver");
 exports.createArtistFolder = (name, downloadPath = null) => {
     const downloadFolderName = downloadPath || config_1.Config.localFolderDownload;
-    const artistPath = path_1.join(__dirname, downloadFolderName, name);
-    const downloadFolderPath = path_1.join(__dirname, downloadFolderName);
+    const artistPath = path_1.join(downloadFolderName, name);
+    const downloadFolderPath = path_1.join(downloadFolderName);
     if (!fs_1.existsSync(downloadFolderPath)) {
         fs_1.mkdirSync(downloadFolderPath);
     }
@@ -25,10 +25,9 @@ exports.createArtistFolder = (name, downloadPath = null) => {
 exports.saveImage = (url, folder) => {
     const fileName = `${new Date().getTime()}-${url.split('/').pop().split('#')[0].split('?')[0]}`;
     const relativeFilePath = `${folder.relativeArtistPath}/${fileName}`;
-    const filePathToSave = path_1.join(__dirname, relativeFilePath);
     return new Promise((resolve) => {
         request_1.default(url)
-            .pipe(fs_1.createWriteStream(filePathToSave))
+            .pipe(fs_1.createWriteStream(relativeFilePath))
             .on('close', () => {
             resolve({ fileName, relativeFilePath });
         });

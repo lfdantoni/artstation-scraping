@@ -5,16 +5,21 @@ import {ArtStationScrapingService, ImageState, ScrapingProcessOptions} from '../
 import {GDriveService} from '../services/gdrive.service';
 import {UserService} from '../services/users.service';
 import {IRoute} from './route';
+import QueueClass, {Queue} from 'bull';
 
 @injectable()
 export class ProcessRoute implements IRoute {
   router: Router;
   path: string = '/process';
+  redis = process.env.REDIS_URL;
+  queue: Queue;
 
   constructor(@inject(TYPES.FileStorage) private fileStorage: GDriveService,
               @inject(TYPES.UserService) private userService: UserService) {
     this.router = Router();
     this.config();
+
+    this.queue = new QueueClass('worker', this.redis);
   }
 
   private async enqueueProcess(req: Request, resp: Response) {
@@ -73,7 +78,14 @@ export class ProcessRoute implements IRoute {
     })
   }
 
+  private async testQueue(req: Request, resp: Response) {
+    const job = await this.queue.add({test: '1'});
+    console.log(job)
+    resp.json({ id: job.id });
+  }
+
   private config(): void {
     this.router.post('/', this.enqueueProcess.bind(this));
+    this.router.get('/', this.testQueue.bind(this))
   }
 }
