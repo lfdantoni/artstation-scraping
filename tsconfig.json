@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "sourceMap": false,
     "outDir": "build",
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "types": ["reflect-metadata"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -16,7 +16,11 @@
       "*": [
         "node_modules/*",
         "src/types/*"
-      ]
+      ],
+      "@services/*": ["services/*"],
+      "@ioc/*": ["ioc/*"],
+      "@models/*": ["models/*"],
+      "@interfaces/*": ["interfaces/*"]
     }
   },
   "include": [

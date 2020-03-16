@@ -1,1 +1,0 @@
-console.log('Job runs at ', new Date())

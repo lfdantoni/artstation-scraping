@@ -1,8 +1,8 @@
 import {config} from 'dotenv';
-import {OAuth2Client} from 'google-auth-library';
 import {google} from 'googleapis';
 import {injectable} from 'inversify';
 import {decode} from 'jsonwebtoken';
+import { OAuth2Client } from 'google-auth-library';
 
 config();
 
@@ -13,7 +13,7 @@ export class GOAuthService {
     'https://www.googleapis.com/auth/userinfo.profile',
     'https://www.googleapis.com/auth/userinfo.email'];
 
-  public oAuth2Client: OAuth2Client;
+  public oAuth2Client: any;
 
   private credentials: any;
 

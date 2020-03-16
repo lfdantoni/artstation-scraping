@@ -79,7 +79,13 @@ export class ProcessRoute implements IRoute {
   }
 
   private async testQueue(req: Request, resp: Response) {
-    const job = await this.queue.add({test: '1'});
+
+    const job = await this.queue.add({
+      artistId: req.query.artistId,
+      userId: req.query.userId,
+      createRootFolder: req.query.createRootFolder
+    });
+
     // tslint:disable-next-line: no-console
     console.log(job)
     resp.json({ id: job.id });

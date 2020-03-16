@@ -4,8 +4,8 @@ import {drive_v3, google} from 'googleapis';
 import { inject, injectable } from 'inversify';
 import { TYPES } from '../ioc/constants/types';
 import { GOAuthService } from './goauth.service';
-import { IGCredential } from '../interfaces/entities/igcredential.entity';
 import { MimeTypeHelper } from '../helpers/mime-type.helper';
+import { IGCredential } from '@interfaces/entities/igcredential.entity';
 
 @injectable()
 export class GDriveService {
@@ -15,7 +15,10 @@ export class GDriveService {
   public async listFiles(folderId: string, credential?: IGCredential): Promise<any[]> {
     this.checkCredential(credential);
 
-    const drive = google.drive({version: 'v3', auth:  this.oAuthService.oAuth2Client});
+    const drive = google.drive({
+      version: 'v3',
+      auth: this.oAuthService.oAuth2Client
+    });
 
     return new Promise((resolve, reject) => {
 
