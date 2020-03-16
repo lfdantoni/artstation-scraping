@@ -13,7 +13,7 @@
     "dev:worker:watch": "nodemon --config nodemon-worker.json",
     "build-start": "npm run build && node ./build/index.js",
     "build": "npm run lint && tsc",
-    "lint": "lint --project tsconfig.json",
+    "lint": "tslint --project tsconfig.json",
     "heroku-postbuild": "npm run build"
   },
   "keywords": [],
