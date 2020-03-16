@@ -36,7 +36,7 @@ function start() {
 
   workQueue.process(maxJobsPerWorker, async (job) => {
     // tslint:disable-next-line: no-console
-    console.log(job)
+    console.log(job.data)
 
     MongooseDB.connect()
     .then(async() => {
