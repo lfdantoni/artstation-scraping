@@ -1,5 +1,5 @@
 import {UserModel} from '../models/user.model';
-import { IUser } from '../interfaces/entities/user.entity';
+import { IUser } from '../interfaces/entities/iuser.entity';
 import { injectable, inject } from 'inversify';
 import { GCredentialModel } from '../models/gcredential.model';
 import { TYPES } from '../ioc/constants/types';

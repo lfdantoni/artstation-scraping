@@ -1,5 +1,5 @@
 import {Schema, Document, model, Model, Types} from 'mongoose';
-import { IUser } from '../interfaces/entities/user.entity';
+import { IUser } from '../interfaces/entities/iuser.entity';
 
 const userSchema = new Schema({
   gId: String,
